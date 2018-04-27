@@ -1,11 +1,25 @@
 package br.unibh.loja.entidades;
 
+import javax.persistence.*;
+
+@Entity
+@Table (name="tb_categoria")
 public class Categoria {
+	@Id
+	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private Long id;
+	@Column (length=100, nullable=false)
 	private String descricao;
+	@Version
+	private Long version;
 	
 	
-	
+	public Long getVersion() {
+		return version;
+	}
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 	public Categoria(Long id, String descricao) {
 		super();
 		this.id = id;
