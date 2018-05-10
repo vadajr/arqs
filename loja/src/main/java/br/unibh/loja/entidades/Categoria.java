@@ -1,6 +1,10 @@
 package br.unibh.loja.entidades;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table (name="tb_categoria")
@@ -8,8 +12,13 @@ public class Categoria {
 	@Id
 	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank
+	@Size(max=100)
+	@Pattern(regexp="[A-zÀ-ú.´\\/\\- ]*", message="Caracteres permitidos: letras, espaços, ponto e aspas simples, traços e barra (/)")
 	@Column (length=100, nullable=false)
 	private String descricao;
+	
 	@Version
 	private Long version;
 	
@@ -69,6 +78,10 @@ public class Categoria {
 	@Override
 	public String toString() {
 		return "Categoria [id=" + id + ", descricao=" + descricao + "]";
+	}
+	
+	public Categoria() {
+		
 	}
 	
 	

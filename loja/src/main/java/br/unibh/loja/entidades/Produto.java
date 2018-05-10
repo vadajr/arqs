@@ -3,6 +3,12 @@ package br.unibh.loja.entidades;
 import java.math.BigDecimal;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table (name="tb_produto")
@@ -10,16 +16,32 @@ public class Produto {
 	@Id
 	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank
+	@Size(max=100)
 	@Column (length=100, nullable=false)
+	@Pattern(regexp="[A-zÀ-ú.´ ]*", message="Caracteres permitidos: letras, espaços, ponto e aspas simples")
 	private String nome;
+	
+	@NotBlank
+	@Pattern(regexp="[A-zÀ-ú.´\\/\\- ]*", message="Caracteres permitidos: letras, espaços, ponto e aspas simples, traços e barra (/)")
 	@Column (length=4000, nullable=false)
 	private String descricao;
+
+	@NotNull
 	@ManyToOne
 	private Categoria categoria;
+
+	@Min(value = 0, message = "O preço precisa ser um valor positivo")
+	@NotNull
 	@Column (precision=14, scale=2,  nullable=false)
 	private BigDecimal preco;
+	
+	@Pattern(regexp="[A-zÀ-ú.´ ]*", message="Caracteres permitidos: letras, espaços, ponto e aspas simples")
+	@Size(max=100)
 	@Column(length=100, nullable=false)
 	private String fabricante;
+	
 	@Version
 	private Long version;
 	
@@ -126,6 +148,11 @@ public class Produto {
 	public String toString() {
 		return "Produto [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", preco=" + preco
 				+ ", fabricante=" + fabricante + "]";
+	}
+	
+	
+	public Produto() {
+		
 	}
 	
 	

@@ -15,6 +15,16 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.br.CPF;
+
+
 
 @Entity
 @Table (name="tb_cliente")
@@ -23,31 +33,60 @@ public class Cliente {
 	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
+	@Size(min=3, max=100)
+	@Pattern(regexp="[A-zÀ-ú.´ ]*", message="Caracteres permitidos: letras, espaços, ponto e aspas simples")
 	@Column(length=100, nullable=false)
 	private String nome;
+	
+	@NotBlank
+	@Size(min=8, max=15)
+	@Pattern(regexp="[A-z0-9]*", message="Caracteres permitidos: letras e números")
 	@Column(length=15, nullable=false)
 	private String login;
+	
+	@NotBlank
+	@Size(max=100)
 	@Column(length=100, nullable=false)
 	private String senha;
+	
+	@NotBlank
 	@Column(length=100, nullable=false)
+	@Size(max=100)
+	@Pattern(regexp="[A-zÀ-ú]*", message="Caracteres permitidos: letras, acentos e espaços")
 	private String perfil;
+
 	@Column (name="cpf", length=11, unique=true)
+	@CPF
 	private String cpf;
+	
+	@Pattern(regexp="\\([\\d]{2}\\)[\\d]{4,5}\\-[\\d]{4}", message="Siga o formato (99)09999-9999")
 	@Column (length=14, nullable=true)
 	private String telefone;
+	
+	@Size(max=100)
+	@Email
 	@Column (length=100, nullable=true)
 	private String email;
+	
+	@Past
+	@NotNull
 	@Temporal(TemporalType.DATE)
 	@Column(name="data_nascimento", nullable=false)
 	private Date dataNascimento;
+	
+	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="data_cadastro", nullable=false)
 	private Date dataCadastro;
+	
 	@Version
 	private Long version;
 	
 	
-	
+	public Cliente() {
+		
+	}
 	public Long getVersion() {
 		return version;
 	}
